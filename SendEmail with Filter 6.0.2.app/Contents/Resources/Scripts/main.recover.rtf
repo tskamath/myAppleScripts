@@ -1,0 +1,3524 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1343\cocoasubrtf160
+{\fonttbl\f0\fnil\fcharset0 Verdana;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red64\green128\blue0;\red0\green22\blue176;
+\red68\green21\blue176;\red0\green0\blue255;\red76\green78\blue78;\red108\green5\blue211;}
+\deftab480
+\pard\pardeftab480\slleading20\pardirnatural
+
+\f0\b\fs24 \cf2 property
+\b0  \cf3 MsgTitle\cf2  : "Send Individual Email to Contacts"\
+
+\b property
+\b0  \cf3 sourceFolder\cf2  : (
+\b \cf4 path to
+\b0 \cf2  
+\i \cf5 desktop folder
+\i0 \cf2 ) 
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 \
+\cf7 -- property sourceFolder : (path to desktop folder) as string\cf2 \
+
+\b property
+\b0  \cf3 logfolder\cf2  : "_scriptLogs"\
+
+\b property
+\b0  \cf3 logfile\cf2  : "events"\
+
+\b property
+\b0  \cf3 errorFile\cf2  : "error"\
+
+\b property
+\b0  \cf3 upTime\cf2  : 5\
+
+\b property
+\b0  \cf3 debugFlag\cf2  : 
+\i \cf8 true
+\i0 \cf2 \
+
+\b property
+\b0  \cf3 isLastName\cf2  : "Company"\
+\
+
+\b on
+\b0  
+\b \cf6 run
+\b0 \cf2 \
+	
+\b try
+\b0 \
+		\cf7 -- set MsgTitle to name of me\cf2 \
+		\cf7 -- set isLastName to "Company"\cf2 \
+		
+\b set
+\b0  \cf3 MyName\cf2  
+\b to
+\b0  
+\b \cf4 do shell script
+\b0 \cf2  "whoami"\
+		\
+		
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Finder"\
+			
+\b if
+\b0  
+\b not
+\b0  (
+\b \cf6 exists
+\b0 \cf2  
+\i \cf6 folder
+\i0 \cf2  \cf3 logfolder\cf2  
+\b of
+\b0  (\cf3 sourceFolder\cf2  
+\b as
+\b0  
+\i \cf6 alias
+\i0 \cf2 )) 
+\b then
+\b0 \
+				
+\b \cf6 make
+\b0 \cf2  \cf6 new\cf2  
+\i \cf6 folder
+\i0 \cf2  \cf6 at\cf2  \cf3 sourceFolder\cf2  \cf6 with properties\cf2  \{\cf8 name\cf2 :\cf3 logfolder\cf2 \}\
+			
+\b end
+\b0  
+\b if
+\b0 \
+			\cf7 -- set \{year:y, month:m, day:d\} to (current date)\cf2 \
+			\cf7 -- set theDate to d & -m * 1 & -y as string -- 21-12-2014\cf2 \
+			\cf7 -- set theDate to d & -m & -y as string -- 21-12-2014 -- also use "month as integer"\cf2 \
+			\cf7 -- set theDate to d & "-" & m & -y as string -- 21-December-2014\cf2 \
+			
+\b set
+\b0  \cf3 tmpDate\cf2  
+\b to
+\b0  (\cf8 day\cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 )) & "-" & (
+\i \cf6 month
+\i0 \cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 ) 
+\b as
+\b0  
+\i \cf6 integer
+\i0 \cf2 ) & "-" & (\cf8 year\cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 )) 
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 \
+			\
+			\
+			
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "System Events"\
+				
+\b set
+\b0  \cf3 tmpData\cf2  
+\b to
+\b0  \cf3 MsgTitle\cf2  & "-" & \cf3 logfile\cf2  & "-" & \cf3 tmpDate\cf2  & ".txt"\
+				
+\b set
+\b0  \cf3 theLogFile\cf2  
+\b to
+\b0  (\cf3 sourceFolder\cf2  & \cf3 logfolder\cf2  & ":" & \cf3 tmpData\cf2 )\
+				
+\b if
+\b0  
+\b not
+\b0  (
+\b \cf6 exists
+\b0 \cf2  
+\i \cf6 file
+\i0 \cf2  (\cf3 sourceFolder\cf2  & \cf3 logfolder\cf2  & ":" & \cf3 tmpData\cf2 )) 
+\b then
+\b0 \
+					
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Finder"\
+						
+\b \cf6 make
+\b0 \cf2  \cf6 new\cf2  
+\i \cf6 file
+\i0 \cf2  \cf6 at\cf2  
+\i \cf6 folder
+\i0 \cf2  \cf3 logfolder\cf2  \cf6 with properties\cf2  \{\cf8 name\cf2 :\cf3 tmpData\cf2 \}\
+						\cf7 -- cannot accessthe file without alias --\cf2 \
+						
+\b set
+\b0  \cf8 extension hidden\cf2  
+\b of
+\b0  
+\i \cf6 alias
+\i0 \cf2  (\cf3 sourceFolder\cf2  & \cf3 logfolder\cf2  & ":" & \cf3 tmpData\cf2 ) 
+\b to
+\b0  
+\i \cf8 false
+\i0 \cf2 \
+						
+\b set
+\b0  \cf3 tmpData\cf2  
+\b to
+\b0  "date, time, selectedContacts, filteredContacts, contactsEmailed, contactsEmailErr, contactsBlacklist" & \cf8 return\cf2 \
+						
+\b my
+\b0  \cf3 write_to_file\cf2 (\cf3 tmpData\cf2 , \cf3 theLogFile\cf2 , 
+\i \cf8 false
+\i0 \cf2 ) \cf7 -- true is append & false is New File\cf2 \
+						\cf7 --21-12-2014,4:27:47 pm,2 Contacts Processed,1 Contacts to Send,1 Email Sent,0 Email Not Sent,1 is Blocked Contacts\cf2 \
+					
+\b end
+\b0  
+\b tell
+\b0 \
+				
+\b end
+\b0  
+\b if
+\b0 \
+				
+\b set
+\b0  \cf3 tmpData\cf2  
+\b to
+\b0  \cf3 MsgTitle\cf2  & "-" & \cf3 errorFile\cf2  & "-" & \cf3 tmpDate\cf2  & ".txt"\
+				
+\b set
+\b0  \cf3 theErrorFile\cf2  
+\b to
+\b0  (\cf3 sourceFolder\cf2  & \cf3 logfolder\cf2  & ":" & \cf3 tmpData\cf2 )\
+				
+\b if
+\b0  
+\b not
+\b0  (
+\b \cf6 exists
+\b0 \cf2  
+\i \cf6 file
+\i0 \cf2  (\cf3 sourceFolder\cf2  & \cf3 logfolder\cf2  & ":" & \cf3 tmpData\cf2 )) 
+\b then
+\b0 \
+					\
+					
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Finder"\
+						
+\b \cf6 make
+\b0 \cf2  \cf6 new\cf2  
+\i \cf6 file
+\i0 \cf2  \cf6 at\cf2  
+\i \cf6 folder
+\i0 \cf2  \cf3 logfolder\cf2  \cf6 with properties\cf2  \{\cf8 name\cf2 :\cf3 tmpData\cf2 \}\
+						\cf7 -- cannot accessthe file without alias --\cf2 \
+						
+\b set
+\b0  \cf8 extension hidden\cf2  
+\b of
+\b0  
+\i \cf6 alias
+\i0 \cf2  (\cf3 sourceFolder\cf2  & \cf3 logfolder\cf2  & ":" & \cf3 tmpData\cf2 ) 
+\b to
+\b0  
+\i \cf8 false
+\i0 \cf2 \
+						
+\b set
+\b0  \cf3 tmpData\cf2  
+\b to
+\b0  "date, time, errorNumber, Error" & \cf8 return\cf2 \
+						
+\b my
+\b0  \cf3 write_to_file\cf2 (\cf3 tmpData\cf2 , \cf3 theErrorFile\cf2 , 
+\i \cf8 false
+\i0 \cf2 ) \cf7 -- true is append & false is New File\cf2 \
+						\cf7 --21-12-2014,4:27:47 pm,2 Contacts Processed,1 Contacts to Send,1 Email Sent,0 Email Not Sent,1 is Blocked Contacts\cf2 \
+					
+\b end
+\b0  
+\b tell
+\b0 \
+				
+\b end
+\b0  
+\b if
+\b0 \
+				\
+			
+\b end
+\b0  
+\b tell
+\b0 \
+			\cf7 -- return yes\cf2 \
+		
+\b end
+\b0  
+\b tell
+\b0 \
+		\
+		
+\b repeat
+\b0 \
+			
+\b if
+\b0  \cf3 debugFlag\cf2  
+\b is
+\b0  
+\i \cf8 false
+\i0 \cf2  
+\b then
+\b0 \
+				
+\b set
+\b0  \cf3 SendEmailState\cf2  
+\b to
+\b0  "EMAIL" \cf7 -- "ON"\cf2 \
+				
+\b set
+\b0  \cf3 tmpStr\cf2  
+\b to
+\b0  " : Auto Send Mode: Email will be sent"\
+				
+\b set
+\b0  \cf3 btnEmail\cf2  
+\b to
+\b0  "only DRAFT"\
+				
+\b set
+\b0  \cf3 btnEmailMsg\cf2  
+\b to
+\b0  "\\"only Draft Emails Created\\""\
+			
+\b else
+\b0 \
+				
+\b set
+\b0  \cf3 SendEmailState\cf2  
+\b to
+\b0  "ONLY DRAFT" \cf7 -- "OFF"\cf2 \
+				
+\b set
+\b0  \cf3 tmpStr\cf2  
+\b to
+\b0  " : only Draft Emails Created"\
+				
+\b set
+\b0  \cf3 btnEmail\cf2  
+\b to
+\b0  "AUTO SEND"\
+				
+\b set
+\b0  \cf3 btnEmailMsg\cf2  
+\b to
+\b0  "\\"Auto Send Mode\\""\
+			
+\b end
+\b0  
+\b if
+\b0 \
+			\
+			
+\b if
+\b0  \cf3 isLastName\cf2  
+\b is
+\b0  "Company" 
+\b then
+\b0 \
+				
+\b set
+\b0  \cf3 LastNameState\cf2  
+\b to
+\b0  "LAST NAME FIELD FILTER"\
+				\cf7 -- set tmpFilter to " is Used: Filtered on Last Name"\cf2 \
+				
+\b set
+\b0  \cf3 btnFilter\cf2  
+\b to
+\b0  "COMPANY"\
+				
+\b set
+\b0  \cf3 btnFilterMsg\cf2  
+\b to
+\b0  " Filter to COMPANY NAME Field"\
+				\
+			
+\b else
+\b0 \
+				
+\b set
+\b0  \cf3 LastNameState\cf2  
+\b to
+\b0  "COMPANY NAME FIELD Filter"\
+				
+\b set
+\b0  \cf3 btnFilter\cf2  
+\b to
+\b0  "LAST NAME"\
+				
+\b set
+\b0  \cf3 btnFilterMsg\cf2  
+\b to
+\b0  " Filter to LAST NAME Field"\
+				\
+			
+\b end
+\b0  
+\b if
+\b0 \
+			\cf7 -- tell application "System Events"\cf2 \
+			
+\b \cf4 display dialog
+\b0 \cf2  "This script will Send Email to People in \\"Contacts Group\\" Selected" & \'ac\
+				\cf8 return\cf2  & \cf8 return\cf2  & "- the Message contents will be chosen from the \\"Draft Email\\" in \\"Draft Email Box\\"" & \'ac\
+				\cf8 return\cf2  & \cf8 return\cf2  & "-You can also Select Group in Contacts to whom you do not want to send email" & \'ac\
+				\cf8 return\cf2  & \cf8 return\cf2  & "-You can Select the Companies / SurName to whom you do not want to send email" & \'ac\
+				\cf8 return\cf2  & \cf8 return\cf2  & \cf3 LastNameState\cf2  & " is Used" & \'ac\
+				\cf8 return\cf2  & \cf8 tab\cf2  & ": to Change Click \\"Set Prefs\\"" & \'ac\
+				\cf8 return\cf2  & \cf8 return\cf2  & "AUTO-SEND: " & \cf3 SendEmailState\cf2  & \cf3 tmpStr\cf2  & \'ac\
+				\cf8 return\cf2  & \cf8 tab\cf2  & ": to Change Click \\"Set Prefs\\"" \cf4 with icon\cf2  1 \'ac\
+				\cf4 buttons\cf2  \{"Cancel", "Set Prefs", "Begin"\} \cf4 default button\cf2  3 \cf4 with title\cf2  \cf3 MsgTitle\cf2 \
+			\cf7 -- end tell\cf2 \
+			
+\b if
+\b0  
+\b the
+\b0  \cf5 button returned\cf2  
+\b of
+\b0  
+\b the
+\b0  \cf8 result\cf2  
+\b is
+\b0  "Begin" 
+\b then
+\b0 \
+				
+\b exit
+\b0  
+\b repeat
+\b0 \
+			
+\b else
+\b0 \
+				\cf7 -- display dialog "Set AUTO-SEND to:" buttons \{"Cancel", "DRAFT", "EMAIL"\} default button SendEmailState\cf2 \
+				
+\b \cf4 display dialog
+\b0 \cf2  "AUTO-SEND is: " & \cf3 SendEmailState\cf2  & \cf8 return\cf2  & "CLICK: " & \cf3 btnEmail\cf2  & " to Set in " & \cf3 btnEmailMsg\cf2  & \cf8 return\cf2  \'ac\
+					& \cf8 return\cf2  & \cf3 LastNameState\cf2  & " is Used" & \cf8 return\cf2  & "CLICK: " & \cf3 btnFilter\cf2  & " to Set" & \cf3 btnFilterMsg\cf2  & \cf8 return\cf2  \'ac\
+					& \cf8 return\cf2  & \'ac\
+					"CLICK: Cancel to Exit" \cf4 buttons\cf2  \{"Cancel", \cf3 btnEmail\cf2 , \cf3 btnFilter\cf2 \} \cf4 default button\cf2  "Cancel" \cf4 with title\cf2  \cf3 MsgTitle\cf2 \
+				
+\b if
+\b0  
+\b the
+\b0  \cf5 button returned\cf2  
+\b of
+\b0  
+\b the
+\b0  \cf8 result\cf2  
+\b is
+\b0  "only DRAFT" 
+\b then
+\b0 \
+					
+\b set
+\b0  \cf3 debugFlag\cf2  
+\b to
+\b0  
+\i \cf8 true
+\i0 \cf2 \
+				
+\b else
+\b0  
+\b if
+\b0  
+\b the
+\b0  \cf5 button returned\cf2  
+\b of
+\b0  
+\b the
+\b0  \cf8 result\cf2  
+\b is
+\b0  "AUTO SEND" 
+\b then
+\b0 \
+					
+\b set
+\b0  \cf3 debugFlag\cf2  
+\b to
+\b0  
+\i \cf8 false
+\i0 \cf2 \
+				
+\b else
+\b0  
+\b if
+\b0  
+\b the
+\b0  \cf5 button returned\cf2  
+\b of
+\b0  
+\b the
+\b0  \cf8 result\cf2  
+\b is
+\b0  "COMPANY" 
+\b then
+\b0 \
+					
+\b set
+\b0  \cf3 isLastName\cf2  
+\b to
+\b0  "Last Name"\
+				
+\b else
+\b0  
+\b if
+\b0  
+\b the
+\b0  \cf5 button returned\cf2  
+\b of
+\b0  
+\b the
+\b0  \cf8 result\cf2  
+\b is
+\b0  "LAST NAME" 
+\b then
+\b0 \
+					
+\b set
+\b0  \cf3 isLastName\cf2  
+\b to
+\b0  "Company"\
+				
+\b end
+\b0  
+\b if
+\b0 \
+			
+\b end
+\b0  
+\b if
+\b0 \
+		
+\b end
+\b0  
+\b repeat
+\b0 \
+		\
+		
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "System Events"\
+			
+\b if
+\b0  (
+\b \cf6 exists
+\b0 \cf2  
+\i \cf6 process
+\i0 \cf2  "Mail") 
+\b then
+\b0 \
+				
+\b \cf6 quit
+\b0 \cf2  
+\i \cf6 application
+\i0 \cf2  "Mail"\
+				
+\b with
+\b0  
+\b timeout
+\b0  
+\b of
+\b0  60 
+\i \cf6 seconds
+\i0 \cf2 \
+					
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "System Events"\
+						
+\b repeat
+\b0  
+\b until
+\b0  
+\b not
+\b0  (
+\b \cf6 exists
+\b0 \cf2  
+\i \cf6 process
+\i0 \cf2  "Mail") \cf7 -- wait for process to close\cf2 \
+							\cf7 -- delay 0.2\cf2 \
+							
+\b tell
+\b0  
+\i \cf8 current application
+\i0 \cf2  
+\b to
+\b0  
+\b \cf4 do shell script
+\b0 \cf2  "sleep 0.2"\
+						
+\b end
+\b0  
+\b repeat
+\b0 \
+						
+\b \cf4 beep
+\b0 \cf2 \
+					
+\b end
+\b0  
+\b tell
+\b0 \
+				
+\b end
+\b0  
+\b timeout
+\b0 \
+			
+\b end
+\b0  
+\b if
+\b0 \
+		
+\b end
+\b0  
+\b tell
+\b0 \
+		\
+		
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Mail" 
+\b to
+\b0  
+\b \cf6 activate
+\b0 \cf2 \
+		\
+		
+\b set
+\b0  \cf3 rtnValue\cf2  
+\b to
+\b0  
+\b my
+\b0  \cf3 startINI\cf2 ()\
+		
+\b if
+\b0  \cf3 rtnValue\cf2  
+\b is
+\b0  
+\b not
+\b0  "ok" 
+\b then
+\b0 \
+			
+\b error
+\b0  \cf6 number\cf2  \cf3 rtnValue\cf2  \cf7 -- 1000\cf2 \
+		
+\b end
+\b0  
+\b if
+\b0 \
+		\cf7 -- Mail.app is open. due to a issue with Mail.app we are booting the Mail.app\cf2 \
+		\
+		
+\b \cf6 quit
+\b0 \cf2  
+\i \cf6 application
+\i0 \cf2  "Mail"\
+		
+\b with
+\b0  
+\b timeout
+\b0  
+\b of
+\b0  60 
+\i \cf6 seconds
+\i0 \cf2 \
+			
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "System Events"\
+				
+\b repeat
+\b0  
+\b until
+\b0  
+\b not
+\b0  (
+\b \cf6 exists
+\b0 \cf2  
+\i \cf6 process
+\i0 \cf2  "Mail") \cf7 -- wait for process to close\cf2 \
+					\cf7 -- delay 0.2\cf2 \
+					
+\b tell
+\b0  
+\i \cf8 current application
+\i0 \cf2  
+\b to
+\b0  
+\b \cf4 do shell script
+\b0 \cf2  "sleep 0.2"\
+				
+\b end
+\b0  
+\b repeat
+\b0 \
+				
+\b \cf4 beep
+\b0 \cf2 \
+			
+\b end
+\b0  
+\b tell
+\b0 \
+		
+\b end
+\b0  
+\b timeout
+\b0 \
+		\
+		
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Mail" 
+\b to
+\b0  
+\b \cf6 activate
+\b0 \cf2 \
+		\
+		
+\b set
+\b0  \cf3 rtnValue\cf2  
+\b to
+\b0  
+\b my
+\b0  \cf3 getEmailAcc\cf2 ()\
+		
+\b if
+\b0  \cf3 rtnValue\cf2  
+\b is
+\b0  
+\i \cf6 missing value
+\i0 \cf2  
+\b then
+\b0  
+\b error
+\b0  \cf6 number\cf2  10004\
+		
+\b set
+\b0  \cf3 myEmailAccount\cf2  
+\b to
+\b0  
+\i \cf6 item
+\i0 \cf2  1 
+\b of
+\b0  \cf3 rtnValue\cf2 \
+		
+\b set
+\b0  \cf3 mySenderEmail\cf2  
+\b to
+\b0  
+\i \cf6 item
+\i0 \cf2  2 
+\b of
+\b0  \cf3 rtnValue\cf2 \
+		
+\b set
+\b0  \cf3 mySenderName\cf2  
+\b to
+\b0  
+\i \cf6 item
+\i0 \cf2  3 
+\b of
+\b0  \cf3 rtnValue\cf2 \
+		\
+		
+\b set
+\b0  \cf3 rtnValue\cf2  
+\b to
+\b0  
+\b my
+\b0  \cf3 getDraftMsg\cf2 ()\
+		\cf7 -- \{tmpMsg, tmpEmailCC, tmpEmailBcc, tmpMsgData, tmpList\}\cf2 \
+		\cf7 -- \{emailMsg, myEmailCC, myEmailBcc, emailMsgData, attachList\}\cf2 \
+		
+\b if
+\b0  \cf3 rtnValue\cf2  
+\b is
+\b0  
+\i \cf6 missing value
+\i0 \cf2  
+\b then
+\b0  
+\b error
+\b0  \cf6 number\cf2  -128 \cf7 -- user cancelled\cf2 \
+		
+\b set
+\b0  \cf3 emailMsgSub\cf2  
+\b to
+\b0  
+\i \cf6 item
+\i0 \cf2  1 
+\b of
+\b0  \cf3 rtnValue\cf2 \
+		
+\b set
+\b0  \cf3 myEmailCC\cf2  
+\b to
+\b0  
+\i \cf6 item
+\i0 \cf2  2 
+\b of
+\b0  \cf3 rtnValue\cf2 \
+		
+\b set
+\b0  \cf3 myEmailBcc\cf2  
+\b to
+\b0  
+\i \cf6 item
+\i0 \cf2  3 
+\b of
+\b0  \cf3 rtnValue\cf2 \
+		
+\b set
+\b0  \cf3 emailMsgContent\cf2  
+\b to
+\b0  
+\i \cf6 item
+\i0 \cf2  4 
+\b of
+\b0  \cf3 rtnValue\cf2 \
+		
+\b set
+\b0  \cf3 attachList\cf2  
+\b to
+\b0  
+\i \cf6 item
+\i0 \cf2  5 
+\b of
+\b0  \cf3 rtnValue\cf2 \
+		\
+		
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Contacts"\
+			
+\b \cf6 activate
+\b0 \cf2 \
+			
+\b set
+\b0  \cf3 thisPerson\cf2  
+\b to
+\b0  \cf8 my card\cf2 \
+			\cf7 -- if thisPerson is missing value then error number 10000\cf2 \
+			\
+			\cf7 -- get the sender\'92s data\cf2 \
+			
+\b tell
+\b0  \cf3 thisPerson\cf2 \
+				
+\b set
+\b0  \cf3 senderFirstName\cf2  
+\b to
+\b0  \cf8 first name\cf2 \
+				
+\b set
+\b0  \cf3 senderLastName\cf2  
+\b to
+\b0  \cf8 last name\cf2 \
+				
+\b if
+\b0  \cf3 senderFirstName\cf2  
+\b is
+\b0  
+\i \cf6 missing value
+\i0 \cf2  
+\b or
+\b0  \cf3 senderLastName\cf2  
+\b is
+\b0  
+\i \cf6 missing value
+\i0 \cf2  
+\b then
+\b0 \
+					
+\b error
+\b0  \cf6 number\cf2  10001\
+				
+\b end
+\b0  
+\b if
+\b0 \
+			
+\b end
+\b0  
+\b tell
+\b0 \
+			\
+			
+\b set
+\b0  \cf3 menuList\cf2  
+\b to
+\b0  \cf8 name\cf2  
+\b of
+\b0  
+\b every
+\b0  
+\i \cf6 group
+\i0 \cf2 \
+			
+\b set
+\b0  \cf3 uMsg\cf2  
+\b to
+\b0  \cf8 return\cf2  & " to whom Email will be sent" & \cf8 return\cf2  \'ac\
+				& \cf8 return\cf2  & "You can Select More than One Group"\
+			\
+			
+\b set
+\b0  \cf3 recipientGroupName\cf2  
+\b to
+\b0  \'ac\
+				
+\b \cf4 choose from list
+\b0 \cf2  \cf3 menuList\cf2  \cf4 with prompt\cf2  \'ac\
+					"Please choose an Address Book Group: " & \cf8 return\cf2  & \cf3 uMsg\cf2  \cf4 with title\cf2  \cf3 MsgTitle\cf2  \cf4 OK button name\cf2  \'ac\
+					"Select" \cf4 cancel button name\cf2  "Cancel" 
+\b with
+\b0  \cf4 multiple selections allowed\cf2  
+\b without
+\b0  \cf4 empty selection allowed\cf2 \
+			
+\b if
+\b0  \cf3 recipientGroupName\cf2  
+\b is
+\b0  
+\i \cf8 false
+\i0 \cf2  
+\b then
+\b0  
+\b error
+\b0  \cf6 number\cf2  -128\
+			
+\b set
+\b0  \cf3 recipientGroupName\cf2  
+\b to
+\b0  \cf3 recipientGroupName\cf2  \cf7 -- as string\cf2 \
+			\cf7 -- set recipientGroup to group recipientGroupName\cf2 \
+			\cf7 -- if (count of people of recipientGroup) is 0 then error number 10005\cf2 \
+			\
+			
+\b set
+\b0  \cf3 uMsg\cf2  
+\b to
+\b0  \cf8 return\cf2  & " to whom Email is not to be sent: 'Banned List'" & \cf8 return\cf2  \'ac\
+				& \cf8 return\cf2  & "You can Select More than One Group"\
+			
+\b set
+\b0  \cf3 donotSendGroup\cf2  
+\b to
+\b0  \'ac\
+				
+\b \cf4 choose from list
+\b0 \cf2  \cf3 menuList\cf2  \cf4 with prompt\cf2  \'ac\
+					"Please choose an Address Book Group: " & \cf8 return\cf2  & \cf3 uMsg\cf2  \cf4 with title\cf2  \cf3 MsgTitle\cf2  \cf4 OK button name\cf2  \'ac\
+					"Select" \cf4 cancel button name\cf2  "Cancel" 
+\b with
+\b0  \cf4 multiple selections allowed\cf2  
+\b without
+\b0  \cf4 empty selection allowed\cf2 \
+			
+\b if
+\b0  \cf3 donotSendGroup\cf2  
+\b is
+\b0  
+\i \cf8 false
+\i0 \cf2  
+\b then
+\b0  
+\b set
+\b0  \cf3 donotSendGroup\cf2  
+\b to
+\b0  \{\}\
+			\cf7 -- else\cf2 \
+			\cf7 --	set donotSendGroup to recipientGroupName -- as string\cf2 \
+			\cf7 -- end if\cf2 \
+			\cf7 -- set donotSendGroup to group recipientGroupName\cf2 \
+			\
+			
+\b set
+\b0  \cf3 uMsg\cf2  
+\b to
+\b0  \cf8 return\cf2  & "Emails will not be sent to these Company" & \'ac\
+				\cf8 return\cf2  & "Works only if the Last Name is Company Name" & \cf8 return\cf2  & \'ac\
+				\cf8 return\cf2  & "You can Select More than One Group"\
+			
+\b set
+\b0  \cf3 donotSendCompany\cf2  
+\b to
+\b0  \'ac\
+				
+\b \cf4 choose from list
+\b0 \cf2  \cf3 menuList\cf2  \cf4 with prompt\cf2  \'ac\
+					"Please choose an Address Book Group: " & \cf8 return\cf2  & \cf3 uMsg\cf2  \cf4 with title\cf2  \cf3 MsgTitle\cf2  \cf4 OK button name\cf2  \'ac\
+					"Select" \cf4 cancel button name\cf2  "Cancel" 
+\b with
+\b0  \cf4 multiple selections allowed\cf2  
+\b without
+\b0  \cf4 empty selection allowed\cf2 \
+			
+\b if
+\b0  \cf3 donotSendCompany\cf2  
+\b is
+\b0  
+\i \cf8 false
+\i0 \cf2  
+\b then
+\b0  
+\b set
+\b0  \cf3 donotSendCompany\cf2  
+\b to
+\b0  \{\}\
+			\
+			
+\b if
+\b0  (
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf3 donotSendGroup\cf2 ) 
+\b is
+\b0  0 
+\b or
+\b0  (
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf3 donotSendCompany\cf2 ) 
+\b is
+\b0  0 
+\b then
+\b0 \
+				
+\b \cf6 activate
+\b0 \cf2 \
+				
+\b set
+\b0  \cf3 tempStr1\cf2  
+\b to
+\b0  "Remove People is Enabled"\
+				
+\b set
+\b0  \cf3 tempStr2\cf2  
+\b to
+\b0  "Remove Company is Enabled"\
+				
+\b if
+\b0  (
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf3 donotSendGroup\cf2 ) 
+\b is
+\b0  0 
+\b then
+\b0  
+\b set
+\b0  \cf3 tempStr1\cf2  
+\b to
+\b0  "Remove People is not Enabled"\
+				
+\b if
+\b0  (
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf3 donotSendCompany\cf2 ) 
+\b is
+\b0  0 
+\b then
+\b0  
+\b set
+\b0  \cf3 tempStr2\cf2  
+\b to
+\b0  "Remove Company is not Enabled"\
+				\
+				
+\b set
+\b0  \cf3 rtnValue\cf2  
+\b to
+\b0  \cf5 button returned\cf2  
+\b of
+\b0  (
+\b \cf4 display dialog
+\b0 \cf2  \cf8 return\cf2  & "The Following Filter are " & \'ac\
+					\cf8 return\cf2  & \cf8 return\cf2  & \cf3 tempStr1\cf2  & \cf8 return\cf2  & \cf3 tempStr2\cf2  & \cf8 return\cf2  & \cf8 return\cf2  \'ac\
+					& "Do you want to continue" \cf4 buttons\cf2  \{"Continue", "STOP"\} \'ac\
+					\cf4 default button\cf2  1 \cf4 with icon\cf2  
+\i \cf5 stop
+\i0 \cf2  \cf4 giving up after\cf2  10 \cf4 with title\cf2  \cf3 MsgTitle\cf2 )\
+				
+\b if
+\b0  \cf3 rtnValue\cf2  
+\b is
+\b0  "STOP" 
+\b then
+\b0 \
+					
+\b error
+\b0  \cf6 number\cf2  -128\
+				
+\b end
+\b0  
+\b if
+\b0 \
+			
+\b end
+\b0  
+\b if
+\b0 \
+			\
+			
+\b set
+\b0  \cf3 tmpList\cf2  
+\b to
+\b0  \{\}\
+			
+\b set
+\b0  \cf3 blackList\cf2  
+\b to
+\b0  
+\b my
+\b0  \cf3 getBannedList\cf2 (\cf3 donotSendCompany\cf2 , \cf3 donotSendGroup\cf2 , \cf3 isLastName\cf2 )\
+			
+\b repeat
+\b0  
+\b with
+\b0  \cf3 theItem\cf2  
+\b in
+\b0  \cf3 blackList\cf2 \
+				
+\b set
+\b0  \cf3 tmpList\cf2  
+\b to
+\b0  (\cf3 tmpList\cf2  & (\cf8 id\cf2  
+\b of
+\b0  \cf3 theItem\cf2 ))\
+			
+\b end
+\b0  
+\b repeat
+\b0 \
+			
+\b set
+\b0  \cf3 blackList\cf2  
+\b to
+\b0  \cf3 tmpList\cf2 \
+			
+\b set
+\b0  \cf3 tmpList\cf2  
+\b to
+\b0  \{\}\
+			
+\b set
+\b0  \cf3 progressCnt\cf2  
+\b to
+\b0  99\
+			\cf7 -- count of people of every group of recipientGroupName\cf2 \
+			
+\b set
+\b0  \cf8 progress total steps\cf2  
+\b to
+\b0  \cf3 progressCnt\cf2 \
+			
+\b repeat
+\b0  
+\b with
+\b0  \cf3 chosenGroup\cf2  
+\b in
+\b0  \cf3 recipientGroupName\cf2 \
+				
+\b set
+\b0  \cf3 tmpList\cf2  
+\b to
+\b0  \cf3 tmpList\cf2  & 
+\i \cf6 person
+\i0 \cf2  
+\b in
+\b0  
+\i \cf6 group
+\i0 \cf2  \cf3 chosenGroup\cf2 \
+				
+\b set
+\b0  \cf8 progress description\cf2  
+\b to
+\b0  \cf8 name\cf2  
+\b of
+\b0  \cf3 chosenGroup\cf2 \
+				
+\b set
+\b0  \cf8 progress additional description\cf2  
+\b to
+\b0  (\cf8 name\cf2  
+\b of
+\b0  
+\i \cf6 person
+\i0 \cf2  
+\b in
+\b0  
+\i \cf6 group
+\i0 \cf2  \cf3 chosenGroup\cf2 )\
+				
+\b set
+\b0  \cf3 progressCnt\cf2  
+\b to
+\b0  \cf3 progressCnt\cf2  - 1\
+				
+\b set
+\b0  \cf8 progress completed steps\cf2  
+\b to
+\b0  \cf3 progressCnt\cf2 \
+			
+\b end
+\b0  
+\b repeat
+\b0 \
+			
+\b return
+\b0 \
+			
+\b set
+\b0  \cf3 totalContacts\cf2  
+\b to
+\b0  (
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf3 tmpList\cf2 )\
+			
+\b \cf4 display notification
+\b0 \cf2  (\cf3 totalContacts\cf2  
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 ) & \'ac\
+				" Processing Selected Contact to Send Email."\
+			\cf7 -- delay 1\cf2 \
+			
+\b tell
+\b0  
+\i \cf8 current application
+\i0 \cf2  
+\b to
+\b0  
+\b \cf4 do shell script
+\b0 \cf2  "sleep 1"\
+			\
+			
+\b set
+\b0  \cf3 send2List\cf2  
+\b to
+\b0  \{\}\
+			
+\b set
+\b0  \cf3 not2sendList\cf2  
+\b to
+\b0  \{\}\
+			\cf7 -- if count of blacklist is not 0 then\cf2 \
+			
+\b repeat
+\b0  
+\b with
+\b0  \cf3 thePeople\cf2  
+\b in
+\b0  \cf3 tmpList\cf2 \
+				
+\b set
+\b0  \cf3 tmpData\cf2  
+\b to
+\b0  \cf8 id\cf2  
+\b of
+\b0  \cf3 thePeople\cf2 \
+				
+\b if
+\b0  \cf3 tmpData\cf2  
+\b is not
+\b0  
+\b in
+\b0  \cf3 blackList\cf2  
+\b then
+\b0 \
+					
+\b if
+\b0  \{\cf3 thePeople\cf2 \} 
+\b is not
+\b0  
+\b in
+\b0  \cf3 send2List\cf2  
+\b then
+\b0 \
+						
+\b set
+\b0  \cf3 send2List\cf2  
+\b to
+\b0  \cf3 send2List\cf2  & \{\cf3 thePeople\cf2 \}\
+					
+\b end
+\b0  
+\b if
+\b0 \
+				
+\b else
+\b0 \
+					
+\b set
+\b0  \cf3 not2sendList\cf2  
+\b to
+\b0  \cf3 not2sendList\cf2  & \{\cf3 thePeople\cf2 \}\
+				
+\b end
+\b0  
+\b if
+\b0 \
+			
+\b end
+\b0  
+\b repeat
+\b0 \
+			\
+		
+\b end
+\b0  
+\b tell
+\b0 \
+		
+\b \cf4 beep
+\b0 \cf2 \
+		
+\b set
+\b0  \cf3 totalSend2\cf2  
+\b to
+\b0  
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf3 send2List\cf2 \
+		
+\b set
+\b0  \cf3 intervalCnt\cf2  
+\b to
+\b0  \cf3 totalSend2\cf2  / 10\
+		
+\b set
+\b0  \cf3 sentList\cf2  
+\b to
+\b0  \{\}\
+		
+\b set
+\b0  \cf3 unSentList\cf2  
+\b to
+\b0  \{\}\
+		
+\b \cf4 display notification
+\b0 \cf2  (\cf3 totalSend2\cf2  
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 ) & \'ac\
+			" Contacts Shall be Sent Emails."\
+		\cf7 -- delay 1\cf2 \
+		
+\b tell
+\b0  
+\i \cf8 current application
+\i0 \cf2  
+\b to
+\b0  
+\b \cf4 do shell script
+\b0 \cf2  "sleep 1"\
+		\
+		
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Mail"\
+			
+\b set
+\b0  \cf3 defaultFormat\cf2  
+\b to
+\b0  \cf8 default message format\cf2 \
+			
+\b set
+\b0  \cf3 defaultQuoteMsg\cf2  
+\b to
+\b0  \cf8 quote original message\cf2 \
+			
+\b set
+\b0  \cf8 default message format\cf2  
+\b to
+\b0  
+\i \cf8 rich format
+\i0 \cf2 \
+			
+\b set
+\b0  \cf8 quote original message\cf2  
+\b to
+\b0  
+\i \cf8 false
+\i0 \cf2 \
+		
+\b end
+\b0  
+\b tell
+\b0 \
+		\
+		\
+		\
+		
+\b set
+\b0  \cf3 progCnt\cf2  
+\b to
+\b0  0\
+		
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Contacts"\
+			
+\b repeat
+\b0  
+\b with
+\b0  \cf3 theEmailContact\cf2  
+\b in
+\b0  \cf3 send2List\cf2 \
+				\cf7 --set rtnvalue to my checkIfSend(send2Name, send2Company)\cf2 \
+				
+\b if
+\b0  
+\b my
+\b0  \cf3 isLastName\cf2  
+\b is
+\b0  
+\b equal to
+\b0  "Company" 
+\b then
+\b0 \
+					
+\b set
+\b0  \cf3 send2Name\cf2  
+\b to
+\b0  \cf8 first name\cf2  
+\b of
+\b0  \cf3 theEmailContact\cf2 \
+					
+\b set
+\b0  \cf3 send2Company\cf2  
+\b to
+\b0  \cf8 last name\cf2  
+\b of
+\b0  \cf3 theEmailContact\cf2 \
+				
+\b else
+\b0 \
+					
+\b set
+\b0  \cf3 send2Name\cf2  
+\b to
+\b0  \cf8 name\cf2  
+\b of
+\b0  \cf3 theEmailContact\cf2 \
+					
+\b set
+\b0  \cf3 send2Company\cf2  
+\b to
+\b0  \cf8 company\cf2  
+\b of
+\b0  \cf3 theEmailContact\cf2 \
+				
+\b end
+\b0  
+\b if
+\b0 \
+				\
+				
+\b set
+\b0  \cf3 send2EmailID\cf2  
+\b to
+\b0  \cf8 value\cf2  
+\b of
+\b0  
+\i \cf6 emails
+\i0 \cf2  
+\b of
+\b0  \cf3 theEmailContact\cf2 \
+				
+\b set
+\b0  \cf3 addressID\cf2  
+\b to
+\b0  \cf8 id\cf2  
+\b of
+\b0  \cf3 theEmailContact\cf2 \
+				\cf7 -- \{emailMsgSub, myEmailCC, myEmailBcc, emailMsgData, attachList\}\cf2 \
+				
+\b set
+\b0  \cf3 rtnValue\cf2  
+\b to
+\b0  
+\b my
+\b0  \cf3 sendEmail\cf2 (\cf3 send2Name\cf2 , \cf3 send2Company\cf2 , \cf3 send2EmailID\cf2 , \'ac\
+					\cf3 emailMsgSub\cf2 , \cf3 myEmailCC\cf2 , \cf3 myEmailBcc\cf2 , \cf3 emailMsgContent\cf2 , \cf3 attachList\cf2 , \'ac\
+					\cf3 myEmailAccount\cf2 , \cf3 mySenderEmail\cf2 , \cf3 mySenderName\cf2 )\
+				\
+				
+\b if
+\b0  \cf3 rtnValue\cf2  
+\b is
+\b0  "ok" 
+\b then
+\b0 \
+					
+\b set
+\b0  \cf3 sentList\cf2  
+\b to
+\b0  \cf3 sentList\cf2  & \cf3 addressID\cf2 \
+				
+\b else
+\b0 \
+					
+\b set
+\b0  \cf3 unSentList\cf2  
+\b to
+\b0  \cf3 unSentList\cf2  & \cf3 addressID\cf2 \
+				
+\b end
+\b0  
+\b if
+\b0 \
+				
+\b set
+\b0  \cf3 progCnt\cf2  
+\b to
+\b0  \cf3 progCnt\cf2  + 1\
+				\
+			
+\b end
+\b0  
+\b repeat
+\b0 \
+		
+\b end
+\b0  
+\b tell
+\b0 \
+		\
+		\
+		
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Mail"\
+			
+\b set
+\b0  \cf8 default message format\cf2  
+\b to
+\b0  \cf3 defaultFormat\cf2 \
+			
+\b set
+\b0  \cf8 quote original message\cf2  
+\b to
+\b0  \cf3 defaultQuoteMsg\cf2 \
+			\cf7 --if debugFlag is false then send every outgoing message\cf2 \
+			
+\b \cf6 activate
+\b0 \cf2 \
+			
+\b if
+\b0  \cf3 debugFlag\cf2  
+\b is
+\b0  
+\i \cf8 false
+\i0 \cf2  
+\b then
+\b0 \
+				
+\b if
+\b0  (
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  
+\i \cf6 window
+\i0 \cf2 ) 
+\b is
+\b0  
+\b greater than
+\b0  1 
+\b then
+\b0  
+\b \cf6 close
+\b0 \cf2  
+\b every
+\b0  
+\i \cf6 window
+\i0 \cf2 \
+				
+\b if
+\b0  (
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  
+\i \cf6 message viewers
+\i0 \cf2 ) 
+\b is
+\b0  0 
+\b then
+\b0  
+\b \cf6 make
+\b0 \cf2  \cf6 new\cf2  
+\i \cf6 message viewer
+\i0 \cf2  \cf6 at\cf2  
+\b front
+\b0 \
+			
+\b end
+\b0  
+\b if
+\b0 \
+		
+\b end
+\b0  
+\b tell
+\b0 \
+		\
+		\cf7 -- (pSelectedCnt, pNot2SendList, pSentList, pUnSentList, smName)\cf2 \
+		
+\b set
+\b0  \cf3 rtnValue\cf2  
+\b to
+\b0  
+\b my
+\b0  \cf3 saveData\cf2 (\cf3 totalContacts\cf2 , \cf3 not2sendList\cf2 , \cf3 sentList\cf2 , \cf3 unSentList\cf2 )\
+		\
+		\cf7 -- save data not2SendList, the send2List is Original Sent to List, unSentList, SentList\cf2 \
+		
+\b set
+\b0  \cf3 totalunSent\cf2  
+\b to
+\b0  
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf3 unSentList\cf2 \
+		
+\b set
+\b0  \cf3 totalSent\cf2  
+\b to
+\b0  
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf3 sentList\cf2 \
+		
+\b set
+\b0  \cf3 totalnotSend2\cf2  
+\b to
+\b0  
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf3 not2sendList\cf2 \
+		\
+		
+\b set
+\b0  \cf3 logMsg\cf2  
+\b to
+\b0  (\cf3 totalContacts\cf2  
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 ) & \'ac\
+			"-Contacts Processed, " & (\cf3 totalSend2\cf2  
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 ) & \'ac\
+			"-Contacts to Send, " & (\cf3 totalSent\cf2  
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 ) & \'ac\
+			"-Email Sent, " & \cf3 totalunSent\cf2  & \'ac\
+			"-Email Not Sent, " & (\cf3 totalnotSend2\cf2  
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 ) & "-Blacklist not Sent"\
+		\
+		
+\b \cf4 display notification
+\b0 \cf2  \cf3 logMsg\cf2 \
+		\cf7 -- delay 1\cf2 \
+		
+\b tell
+\b0  
+\i \cf8 current application
+\i0 \cf2  
+\b to
+\b0  
+\b \cf4 do shell script
+\b0 \cf2  "sleep 3"\
+		
+\b set
+\b0  \cf3 tmpDate\cf2  
+\b to
+\b0  (\cf8 day\cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 )) & "-" & (
+\i \cf6 month
+\i0 \cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 ) 
+\b as
+\b0  
+\i \cf6 integer
+\i0 \cf2 ) & "-" & (\cf8 year\cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 )) 
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 \
+		
+\b set
+\b0  \cf3 logMsg\cf2  
+\b to
+\b0  (\cf3 tmpDate\cf2  & "," & \cf8 time string\cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 ) 
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 ) & "," & ((\cf3 totalContacts\cf2  & "," & \cf3 totalSend2\cf2  & "," & \cf3 totalSent\cf2  & "," & \cf3 totalunSent\cf2  & "," & \cf3 totalnotSend2\cf2 ) 
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 ) & \cf8 return\cf2 \
+		\
+		\cf7 -- set logMsg to totalContacts & ", " & totalSend2 & "," & totalSent & "," & totalunSent & "," & totalnotSend2 & return\cf2 \
+		
+\b my
+\b0  \cf3 write_to_file\cf2 (\cf3 logMsg\cf2 , \cf3 theLogFile\cf2 , 
+\i \cf8 true
+\i0 \cf2 ) \cf7 -- true is append & false is New File\cf2 \
+		\cf7 -- set tmpData to sourceFolder & "_logs:sentEmail.log"\cf2 \
+		\
+		\
+	
+\b on
+\b0  
+\b error
+\b0  \cf3 errorMessage\cf2  \cf6 number\cf2  \cf3 errorNumber\cf2 \
+		
+\b if
+\b0  \cf3 errorNumber\cf2  
+\b is
+\b0  10000 
+\b then
+\b0 \
+			
+\b set
+\b0  \cf3 errorNumber\cf2  
+\b to
+\b0  "MANY EMAIL WINDOWS"\
+			
+\b set
+\b0  \cf3 errorMessage\cf2  
+\b to
+\b0  \'ac\
+				"Many Email Messages are Open " & \cf8 return\cf2  & "Close all Open Messages Windows.. Quiting "\
+			
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Mail" 
+\b to
+\b0  
+\b \cf6 activate
+\b0 \cf2 \
+		
+\b else
+\b0  
+\b if
+\b0  \cf3 errorNumber\cf2  
+\b is
+\b0  10001 
+\b then
+\b0 \
+			
+\b set
+\b0  \cf3 errorNumber\cf2  
+\b to
+\b0  "NO DRAFT EMAIL"\
+			
+\b set
+\b0  \cf3 errorMessage\cf2  
+\b to
+\b0  \'ac\
+				"No Draft Email to Send"\
+		
+\b else
+\b0  
+\b if
+\b0  \cf3 errorNumber\cf2  
+\b is
+\b0  10002 
+\b then
+\b0 \
+			
+\b set
+\b0  \cf3 errorNumber\cf2  
+\b to
+\b0  "NO DEFAULT CARD"\
+			
+\b set
+\b0  \cf3 errorMessage\cf2  
+\b to
+\b0  \'ac\
+				"No person in this Contacts database is set to be the default card or \'93My Card.\'94 Select a person and choose \'93Make This My Card\'94 from the Card menu."\
+		
+\b else
+\b0  
+\b if
+\b0  \cf3 errorNumber\cf2  
+\b is
+\b0  10003 
+\b then
+\b0 \
+			
+\b set
+\b0  \cf3 errorNumber\cf2  
+\b to
+\b0  "MISSING GROUPS"\
+			
+\b set
+\b0  \cf3 errorMessage\cf2  
+\b to
+\b0  \'ac\
+				"There are no groups in the current contact database."\
+		
+\b else
+\b0  
+\b if
+\b0  \cf3 errorNumber\cf2  
+\b is
+\b0  10004 
+\b then
+\b0 \
+			
+\b set
+\b0  \cf3 errorNumber\cf2  
+\b to
+\b0  "NO DEFAULT EMAIL"\
+			
+\b set
+\b0  \cf3 errorMessage\cf2  
+\b to
+\b0  \'ac\
+				"account to Send Email from not selected"\
+		
+\b else
+\b0  
+\b if
+\b0  \cf3 errorNumber\cf2  
+\b is
+\b0  10005 
+\b then
+\b0 \
+			
+\b set
+\b0  \cf3 errorNumber\cf2  
+\b to
+\b0  "MISSING PEOPLE"\
+			
+\b set
+\b0  \cf3 errorMessage\cf2  
+\b to
+\b0  \'ac\
+				"The chosen Contacts group contains no people."\
+		
+\b end
+\b0  
+\b if
+\b0 \
+		
+\b if
+\b0  \cf3 errorNumber\cf2  
+\b is
+\b0  
+\b not
+\b0  -128 
+\b then
+\b0 \
+			
+\b \cf4 display alert
+\b0 \cf2  (\cf3 errorNumber\cf2  
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 ) \cf4 message\cf2  \cf3 errorMessage\cf2 \
+			
+\b set
+\b0  \cf3 tmpDate\cf2  
+\b to
+\b0  (\cf8 day\cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 )) & "-" & (
+\i \cf6 month
+\i0 \cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 ) 
+\b as
+\b0  
+\i \cf6 integer
+\i0 \cf2 ) & "-" & (\cf8 year\cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 )) 
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 \
+			
+\b set
+\b0  \cf3 logMsg\cf2  
+\b to
+\b0  ((\cf3 tmpDate\cf2  & "," & \cf8 time string\cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 ) 
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 ) & "," & \cf3 errorNumber\cf2  
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 ) & "," & \cf3 errorMessage\cf2  & \cf8 return\cf2 \
+			\
+			\cf7 -- set logMsg to totalContacts & ", " & totalSend2 & "," & totalSent & "," & totalunSent & "," & totalnotSend2 & return\cf2 \
+			
+\b my
+\b0  \cf3 write_to_file\cf2 (\cf3 logMsg\cf2 , \cf3 theErrorFile\cf2 , 
+\i \cf8 true
+\i0 \cf2 ) \cf7 -- true is append & false is New File\cf2 \
+			\
+		
+\b end
+\b0  
+\b if
+\b0 \
+		\
+		\cf7 -- error number -128 -- user cancelled --\cf2 \
+		
+\b \cf6 quit
+\b0 \cf2  
+\b me
+\b0 \
+		\cf7 (*\
+		display dialog error_message & space & "Consult reference number " \'ac\
+		        & error_number & ", then try again!" *)\cf2 \
+	
+\b end
+\b0  
+\b try
+\b0 \
+
+\b end
+\b0  
+\b \cf6 run
+\b0 \cf2 \
+\
+
+\b on
+\b0  \cf3 saveData\cf2 (\cf3 pSelectedCnt\cf2 , \cf3 pNot2SendList\cf2 , \cf3 pSentList\cf2 , \cf3 pUnSentList\cf2 )\
+	
+\b local
+\b0  \cf3 tmpStr\cf2 , \cf3 tmpStr1\cf2 , \cf3 tmpStr2\cf2 , \cf3 tmpStr3\cf2 , \cf3 theGroup1\cf2 , \cf3 theGroup2\cf2 , \cf3 theGroup3\cf2 , \cf3 thedata\cf2 \
+	\
+	\cf7 -- pSelected to count of selected contacts\cf2 \
+	
+\b set
+\b0  \cf3 cntSent\cf2  
+\b to
+\b0  
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf3 pSentList\cf2 \
+	
+\b set
+\b0  \cf3 cntBlocked\cf2  
+\b to
+\b0  
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf3 pNot2SendList\cf2 \
+	
+\b set
+\b0  \cf3 cntFailed\cf2  
+\b to
+\b0  
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf3 pUnSentList\cf2 \
+	\
+	
+\b if
+\b0  (
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf3 pSentList\cf2 ) 
+\b is
+\b0  
+\b not
+\b0  0 
+\b or
+\b0  (
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf3 pUnSentList\cf2 ) 
+\b is
+\b0  
+\b not
+\b0  0 
+\b then
+\b0 \
+		
+\b set
+\b0  \cf3 theGroup1\cf2  
+\b to
+\b0  "_" & \cf8 short date string\cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 ) & " @ " & \cf8 time string\cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 ) \'ac\
+			& " - Sent " & \cf3 cntSent\cf2  & " Emails in " & \cf3 pSelectedCnt\cf2  & " Emails Selected"\
+		
+\b set
+\b0  \cf3 theGroup2\cf2  
+\b to
+\b0  "_" & \cf8 short date string\cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 ) & " @ " & \cf8 time string\cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 ) \'ac\
+			& " - FailedContact " & \cf3 cntFailed\cf2  & " in Filtered Contacts of " & \cf3 cntSent\cf2  + \cf3 cntFailed\cf2  & " in " & \cf3 pSelectedCnt\cf2  & " Emails Selected"\
+		
+\b set
+\b0  \cf3 theGroup3\cf2  
+\b to
+\b0  "_" & \cf8 short date string\cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 ) & " @ " & \cf8 time string\cf2  
+\b of
+\b0  (
+\b \cf4 current date
+\b0 \cf2 ) \'ac\
+			& " - BlockedContacts " & \cf3 cntBlocked\cf2  & " in " & \cf3 pSelectedCnt\cf2  & " Emails Selected"\
+	
+\b end
+\b0  
+\b if
+\b0 \
+	
+\b set
+\b0  \cf3 tmpList\cf2  
+\b to
+\b0  \{\cf3 theGroup1\cf2 , \cf3 theGroup2\cf2 , \cf3 theGroup3\cf2 \}\
+	\
+	\cf7 -- set progress total steps to tmpData\cf2 \
+	\cf7 -- set progress description to "processing Contacts..."\cf2 \
+	
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Contacts"\
+		
+\b repeat
+\b0  
+\b with
+\b0  \cf3 theItem\cf2  
+\b in
+\b0  \cf3 tmpList\cf2 \
+			
+\b if
+\b0  
+\b not
+\b0  (
+\b \cf6 exists
+\b0 \cf2  (
+\i \cf6 group
+\i0 \cf2  \cf3 theItem\cf2 )) 
+\b then
+\b0 \
+				
+\b \cf6 make
+\b0 \cf2  \cf6 new\cf2  
+\i \cf6 group
+\i0 \cf2  \cf6 with properties\cf2  \{\cf8 name\cf2 :\cf3 theItem\cf2 \}\
+				
+\b \cf6 save
+\b0 \cf2 \
+			
+\b end
+\b0  
+\b if
+\b0 \
+		
+\b end
+\b0  
+\b repeat
+\b0 \
+		
+\b if
+\b0  \cf3 cntSent\cf2  
+\b is
+\b0  
+\b not
+\b0  0 
+\b then
+\b0 \
+			
+\b repeat
+\b0  
+\b with
+\b0  \cf3 thedata\cf2  
+\b in
+\b0  \cf3 pSentList\cf2 \
+				
+\b set
+\b0  \cf3 tmpStr\cf2  
+\b to
+\b0  
+\i \cf6 person
+\i0 \cf2  
+\i \cf8 id
+\i0 \cf2  \cf3 thedata\cf2 \
+				
+\b \cf6 add
+\b0 \cf2  \cf3 tmpStr\cf2  \cf6 to\cf2  
+\i \cf6 group
+\i0 \cf2  \cf3 theGroup1\cf2 \
+			
+\b end
+\b0  
+\b repeat
+\b0 \
+		
+\b end
+\b0  
+\b if
+\b0 \
+		
+\b if
+\b0  \cf3 cntFailed\cf2  
+\b is
+\b0  
+\b not
+\b0  0 
+\b then
+\b0 \
+			
+\b repeat
+\b0  
+\b with
+\b0  \cf3 thedata\cf2  
+\b in
+\b0  \cf3 pUnSentList\cf2 \
+				
+\b set
+\b0  \cf3 tmpStr\cf2  
+\b to
+\b0  
+\i \cf6 person
+\i0 \cf2  
+\i \cf8 id
+\i0 \cf2  \cf3 thedata\cf2 \
+				
+\b \cf6 add
+\b0 \cf2  \cf3 tmpStr\cf2  \cf6 to\cf2  
+\i \cf6 group
+\i0 \cf2  \cf3 theGroup2\cf2 \
+			
+\b end
+\b0  
+\b repeat
+\b0 \
+		
+\b end
+\b0  
+\b if
+\b0 \
+		
+\b if
+\b0  \cf3 cntBlocked\cf2  
+\b is
+\b0  
+\b not
+\b0  0 
+\b then
+\b0 \
+			
+\b repeat
+\b0  
+\b with
+\b0  \cf3 thedata\cf2  
+\b in
+\b0  \cf3 pNot2SendList\cf2 \
+				
+\b set
+\b0  \cf3 tmpStr\cf2  
+\b to
+\b0  \cf3 thedata\cf2  \cf7 --person id thedata\cf2 \
+				
+\b \cf6 add
+\b0 \cf2  \cf3 tmpStr\cf2  \cf6 to\cf2  
+\i \cf6 group
+\i0 \cf2  \cf3 theGroup3\cf2 \
+			
+\b end
+\b0  
+\b repeat
+\b0 \
+		
+\b end
+\b0  
+\b if
+\b0 \
+		
+\b \cf6 save
+\b0 \cf2 \
+	
+\b end
+\b0  
+\b tell
+\b0 \
+
+\b end
+\b0  \cf3 saveData\cf2 \
+\
+
+\b on
+\b0  \cf3 sendEmail\cf2 (\cf3 pName\cf2 , \cf3 pCompany\cf2 , \cf3 pEmail\cf2 , \cf3 pMsgSub\cf2 , \cf3 pEmailCC\cf2 , \cf3 pEmailBcc\cf2 , \cf3 pMsgData\cf2 , \cf3 pAttach\cf2 , \cf3 sAccount\cf2 , \cf3 sEmail\cf2 , \cf3 sName\cf2 )\
+	
+\b local
+\b0  \cf3 theSubject\cf2 , \cf3 EmailBcc\cf2 , \cf3 EmailCC\cf2 , \cf3 old_delim\cf2 , \cf3 theBody\cf2 , \cf3 theSender\cf2 , \cf3 theName\cf2 , \cf3 theAddress\cf2 \
+	\
+	\cf7 -- Srikanth Kamath <email@domain.com> does not work\cf2 \
+	
+\b set
+\b0  \cf3 theSender\cf2  
+\b to
+\b0  \cf3 sName\cf2  & "-" & \cf3 sEmail\cf2 \
+	
+\b set
+\b0  \cf3 theSubject\cf2  
+\b to
+\b0  \cf3 pMsgSub\cf2 \
+	
+\b set
+\b0  \cf3 EmailCC\cf2  
+\b to
+\b0  \cf3 pEmailCC\cf2 \
+	
+\b set
+\b0  \cf3 EmailBcc\cf2  
+\b to
+\b0  \cf3 pEmailBcc\cf2 \
+	\
+	
+\b set
+\b0  \cf3 theBody\cf2  
+\b to
+\b0  \cf3 pMsgData\cf2 \
+	
+\b set
+\b0  \cf3 theName\cf2  
+\b to
+\b0  \cf3 pName\cf2 \
+	\
+	
+\b if
+\b0  \cf3 pEmail\cf2  
+\b is
+\b0  \{\} 
+\b then
+\b0  
+\b return
+\b0  
+\i \cf6 missing value
+\i0 \cf2 \
+	
+\b if
+\b0  \cf3 theBody\cf2  
+\b is
+\b0  "" 
+\b then
+\b0  
+\b return
+\b0  
+\i \cf6 missing value
+\i0 \cf2 \
+	\
+	
+\b set
+\b0  \cf3 theAttFile\cf2  
+\b to
+\b0  \cf3 pAttach\cf2 \
+	\cf7 --class of theAttachment\cf2 \
+	\
+	
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Mail"\
+		
+\b set
+\b0  \cf3 newMessage\cf2  
+\b to
+\b0  
+\b \cf6 make
+\b0 \cf2  \cf6 new\cf2  
+\i \cf6 outgoing message
+\i0 \cf2  \cf6 with properties\cf2  \{\cf8 subject\cf2 :\cf3 theSubject\cf2 , \cf8 content\cf2 :\cf3 theBody\cf2  & \cf8 return\cf2  & \cf8 return\cf2 \}\
+		
+\b tell
+\b0  \cf3 newMessage\cf2 \
+			
+\b if
+\b0  \cf3 debugFlag\cf2  
+\b is
+\b0  
+\i \cf8 false
+\i0 \cf2  
+\b then
+\b0 \
+				
+\b set
+\b0  \cf8 visible\cf2  
+\b to
+\b0  
+\i \cf8 false
+\i0 \cf2 \
+			
+\b else
+\b0 \
+				
+\b set
+\b0  \cf8 visible\cf2  
+\b to
+\b0  
+\i \cf8 true
+\i0 \cf2 \
+			
+\b end
+\b0  
+\b if
+\b0 \
+			
+\b set
+\b0  \cf8 sender\cf2  
+\b to
+\b0  \cf3 theSender\cf2 \
+			
+\b repeat
+\b0  
+\b with
+\b0  \cf3 theItem\cf2  
+\b in
+\b0  \cf3 pEmail\cf2 \
+				
+\b \cf6 make
+\b0 \cf2  \cf6 new\cf2  
+\i \cf6 to recipient
+\i0 \cf2  \cf6 at\cf2  
+\b end
+\b0  
+\b of
+\b0  
+\i \cf6 to recipients
+\i0 \cf2  \cf6 with properties\cf2  \{\cf8 address\cf2 :\cf3 theItem\cf2 \} \cf7 --\{name:theName, address:theAddress\}\cf2 \
+			
+\b end
+\b0  
+\b repeat
+\b0 \
+			
+\b if
+\b0  \cf3 EmailCC\cf2  
+\b is
+\b0  
+\b not
+\b0  \{\} 
+\b then
+\b0 \
+				
+\b repeat
+\b0  
+\b with
+\b0  \cf3 theItem\cf2  
+\b in
+\b0  \cf3 EmailCC\cf2 \
+					
+\b \cf6 make
+\b0 \cf2  \cf6 new\cf2  
+\i \cf6 recipient
+\i0 \cf2  \cf6 at\cf2  
+\b end
+\b0  
+\b of
+\b0  
+\i \cf6 cc recipients
+\i0 \cf2  \cf6 with properties\cf2  \{\cf8 address\cf2 :\cf3 theItem\cf2 \}\
+				
+\b end
+\b0  
+\b repeat
+\b0 \
+			
+\b end
+\b0  
+\b if
+\b0 \
+			
+\b if
+\b0  \cf3 EmailBcc\cf2  
+\b is
+\b0  
+\b not
+\b0  \{\} 
+\b then
+\b0 \
+				
+\b repeat
+\b0  
+\b with
+\b0  \cf3 theItem\cf2  
+\b in
+\b0  \cf3 EmailBcc\cf2 \
+					
+\b \cf6 make
+\b0 \cf2  \cf6 new\cf2  
+\i \cf6 recipient
+\i0 \cf2  \cf6 at\cf2  
+\b end
+\b0  
+\b of
+\b0  
+\i \cf6 bcc recipients
+\i0 \cf2  \cf6 with properties\cf2  \{\cf8 address\cf2 :\cf3 theItem\cf2 \}\
+				
+\b end
+\b0  
+\b repeat
+\b0 \
+			
+\b end
+\b0  
+\b if
+\b0 \
+			\cf7 -- put in the body of the message ---\cf2 \
+			
+\b set
+\b0  \cf8 content\cf2  
+\b to
+\b0  "Dear " & \cf3 theName\cf2  & "," & \cf8 return\cf2  & \cf8 return\cf2  & \cf3 theBody\cf2 \
+			\cf7 -- delay 0.01\cf2 \
+			
+\b tell
+\b0  
+\i \cf8 current application
+\i0 \cf2  
+\b to
+\b0  
+\b \cf4 do shell script
+\b0 \cf2  "sleep 0.01"\
+			\cf7 -- delay 2\cf2 \
+			\
+			\cf7 -- attach the attachments --\cf2 \
+			
+\b if
+\b0  \cf3 theAttFile\cf2  
+\b is
+\b0  
+\b not
+\b0  \{\} 
+\b then
+\b0 \
+				\cf7 -- display dialog "Sending Att"\cf2 \
+				
+\b repeat
+\b0  
+\b with
+\b0  \cf3 theItem\cf2  
+\b in
+\b0  \cf3 theAttFile\cf2  \cf7 -- as text\cf2 \
+					\cf7 -- display dialog att as string\cf2 \
+					
+\b \cf6 make
+\b0 \cf2  \cf6 new\cf2  
+\i \cf6 attachment
+\i0 \cf2  \cf6 with properties\cf2  \{\cf8 file name\cf2 :\cf3 theItem\cf2 \} \cf6 at\cf2  \'ac\
+						
+\b after
+\b0  
+\b the
+\b0  
+\b last
+\b0  
+\i \cf6 paragraph
+\i0 \cf2 \
+				
+\b end
+\b0  
+\b repeat
+\b0 \
+			
+\b end
+\b0  
+\b if
+\b0 \
+			\
+		
+\b end
+\b0  
+\b tell
+\b0 \
+		
+\b \cf6 activate
+\b0 \cf2 \
+		
+\b if
+\b0  \cf3 debugFlag\cf2  
+\b is
+\b0  
+\i \cf8 false
+\i0 \cf2  
+\b then
+\b0  
+\b \cf6 send
+\b0 \cf2  \cf3 newMessage\cf2 \
+		\cf7 --if debugFlag is false then send every outgoing message\cf2 \
+	
+\b end
+\b0  
+\b tell
+\b0 \
+	\cf7 -- key word to actually send the email.. its in the outbox of mail.app\cf2 \
+	\cf7 -- Send Completed without Error\cf2 \
+	
+\b return
+\b0  "ok"\
+
+\b end
+\b0  \cf3 sendEmail\cf2 \
+\
+
+\b on
+\b0  \cf3 getBannedList\cf2 (\cf3 nCompany\cf2 , \cf3 CheckGroups\cf2 , \cf3 nlast\cf2 )\
+	
+\b local
+\b0  \cf3 tempList\cf2 , \cf3 theList\cf2 , \cf3 nPeople\cf2 , \cf3 theGroup\cf2 , \cf3 tlist\cf2 , \cf3 IDList\cf2 , \cf3 theItem\cf2 , \cf3 tempName\cf2 \
+	\
+	
+\b set
+\b0  \cf3 tmpList\cf2  
+\b to
+\b0  \{\}\
+	
+\b set
+\b0  \cf3 IDList\cf2  
+\b to
+\b0  \{\}\
+	
+\b set
+\b0  \cf3 tlist\cf2  
+\b to
+\b0  \{\}\
+	
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Contacts"\
+		
+\b if
+\b0  \cf3 nlast\cf2  
+\b is
+\b0  
+\b equal to
+\b0  "Company" 
+\b then
+\b0 \
+			
+\b if
+\b0  (
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf3 nCompany\cf2 ) 
+\b is
+\b0  
+\b not
+\b0  0 
+\b then
+\b0 \
+				
+\b repeat
+\b0  
+\b with
+\b0  \cf3 theGroup\cf2  
+\b in
+\b0  \cf3 nCompany\cf2 \
+					
+\b set
+\b0  \cf3 nPeople\cf2  
+\b to
+\b0  
+\i \cf6 person
+\i0 \cf2  
+\b in
+\b0  
+\i \cf6 group
+\i0 \cf2  \cf3 theGroup\cf2 \
+					
+\b repeat
+\b0  
+\b with
+\b0  \cf3 thePeople\cf2  
+\b in
+\b0  \cf3 nPeople\cf2 \
+						
+\b set
+\b0  
+\b end
+\b0  
+\b of
+\b0  \cf3 tmpList\cf2  
+\b to
+\b0  \cf8 last name\cf2  
+\b of
+\b0  \cf3 thePeople\cf2 \
+					
+\b end
+\b0  
+\b repeat
+\b0 \
+				
+\b end
+\b0  
+\b repeat
+\b0 \
+				\
+				
+\b repeat
+\b0  
+\b with
+\b0  \cf3 theItem\cf2  
+\b in
+\b0  \cf3 tempList\cf2 \
+					
+\b if
+\b0  \cf3 theItem\cf2  
+\b is not
+\b0  
+\b in
+\b0  \cf3 tlist\cf2  
+\b then
+\b0 \
+						
+\b set
+\b0  
+\b end
+\b0  
+\b of
+\b0  \cf3 tlist\cf2  
+\b to
+\b0  \cf3 theItem\cf2 \
+						
+\b set
+\b0  \cf3 IDList\cf2  
+\b to
+\b0  (\cf3 IDList\cf2  & (
+\i \cf6 people
+\i0 \cf2  
+\b whose
+\b0  \cf8 last name\cf2  
+\b is
+\b0  \cf3 theItem\cf2 ))\
+					
+\b end
+\b0  
+\b if
+\b0 \
+				
+\b end
+\b0  
+\b repeat
+\b0 \
+			
+\b end
+\b0  
+\b if
+\b0 \
+			\
+			
+\b set
+\b0  \cf3 tmpList\cf2  
+\b to
+\b0  \{\}\
+			
+\b if
+\b0  (
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf3 CheckGroups\cf2 ) 
+\b is
+\b0  
+\b not
+\b0  0 
+\b then
+\b0 \
+				
+\b repeat
+\b0  
+\b with
+\b0  \cf3 theGroup\cf2  
+\b in
+\b0  \cf3 CheckGroups\cf2 \
+					
+\b set
+\b0  \cf3 nPeople\cf2  
+\b to
+\b0  
+\i \cf6 person
+\i0 \cf2  
+\b in
+\b0  
+\i \cf6 group
+\i0 \cf2  \cf3 theGroup\cf2 \
+					
+\b repeat
+\b0  
+\b with
+\b0  \cf3 thePeople\cf2  
+\b in
+\b0  \cf3 nPeople\cf2 \
+						
+\b set
+\b0  
+\b end
+\b0  
+\b of
+\b0  \cf3 tmpList\cf2  
+\b to
+\b0  \cf8 name\cf2  
+\b of
+\b0  \cf3 thePeople\cf2 \
+						
+\b set
+\b0  \cf3 IDList\cf2  
+\b to
+\b0  \cf3 IDList\cf2  & \{\cf3 thePeople\cf2 \}\
+					
+\b end
+\b0  
+\b repeat
+\b0 \
+				
+\b end
+\b0  
+\b repeat
+\b0 \
+			
+\b end
+\b0  
+\b if
+\b0 \
+			\
+		
+\b end
+\b0  
+\b if
+\b0 \
+	
+\b end
+\b0  
+\b tell
+\b0 \
+	
+\b return
+\b0  \cf3 IDList\cf2 \
+
+\b end
+\b0  \cf3 getBannedList\cf2 \
+\
+
+\b on
+\b0  \cf3 getDraftMsg\cf2 ()\
+	
+\b local
+\b0  \cf3 tmpList\cf2 , \cf3 theList\cf2 , \cf3 tmpMsg\cf2 , \cf3 tmpData\cf2 , \cf3 rtnValue\cf2 \
+	
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Mail"\
+		
+\b set
+\b0  \cf3 tmpList\cf2  
+\b to
+\b0  \{\}\
+		
+\b set
+\b0  \cf3 theList\cf2  
+\b to
+\b0  \{\}\
+		
+\b set
+\b0  \cf3 tmpList\cf2  
+\b to
+\b0  \cf8 subject\cf2  
+\b of
+\b0  
+\i \cf6 messages
+\i0 \cf2  
+\b of
+\b0  
+\b every
+\b0  
+\i \cf6 mailbox
+\i0 \cf2  
+\b in
+\b0  \cf8 drafts mailbox\cf2 \
+		
+\b repeat
+\b0  
+\b with
+\b0  \cf3 theItems\cf2  
+\b in
+\b0  \cf3 tmpList\cf2 \
+			
+\b repeat
+\b0  
+\b with
+\b0  \cf3 theItem\cf2  
+\b in
+\b0  \cf3 theItems\cf2 \
+				
+\b set
+\b0  
+\b end
+\b0  
+\b of
+\b0  \cf3 theList\cf2  
+\b to
+\b0  \cf3 theItem\cf2 \
+			
+\b end
+\b0  
+\b repeat
+\b0 \
+		
+\b end
+\b0  
+\b repeat
+\b0 \
+		
+\b set
+\b0  \cf3 tmpMsg\cf2  
+\b to
+\b0  \'ac\
+			
+\b \cf4 choose from list
+\b0 \cf2  \cf3 theList\cf2  \'ac\
+				\cf4 with title\cf2  \cf3 MsgTitle\cf2  \'ac\
+				\cf4 with prompt\cf2  \cf8 return\cf2  & "Please choose an Message to send : " & \cf8 return\cf2  \'ac\
+				\cf4 OK button name\cf2  "Select" \cf4 cancel button name\cf2  \'ac\
+				"Cancel" 
+\b without
+\b0  \cf4 multiple selections allowed\cf2  
+\b and
+\b0  \cf4 empty selection allowed\cf2 \
+		
+\b if
+\b0  \cf3 tmpMsg\cf2  
+\b is
+\b0  
+\i \cf8 false
+\i0 \cf2  
+\b then
+\b0  
+\b return
+\b0  
+\i \cf6 missing value
+\i0 \cf2 \
+		
+\b set
+\b0  \cf3 tmpMsg\cf2  
+\b to
+\b0  
+\i \cf6 item
+\i0 \cf2  1 
+\b of
+\b0  \cf3 tmpMsg\cf2 \
+		
+\b set
+\b0  \cf3 tmpList\cf2  
+\b to
+\b0  
+\i \cf6 messages
+\i0 \cf2  
+\b of
+\b0  
+\b every
+\b0  
+\i \cf6 mailbox
+\i0 \cf2  
+\b in
+\b0  \cf8 drafts mailbox\cf2 \
+		
+\b set
+\b0  \cf3 theList\cf2  
+\b to
+\b0  \{\}\
+		
+\b repeat
+\b0  
+\b with
+\b0  \cf3 theItems\cf2  
+\b in
+\b0  \cf3 tmpList\cf2 \
+			
+\b repeat
+\b0  
+\b with
+\b0  \cf3 theItem\cf2  
+\b in
+\b0  \cf3 theItems\cf2 \
+				
+\b set
+\b0  
+\b end
+\b0  
+\b of
+\b0  \cf3 theList\cf2  
+\b to
+\b0  \cf3 theItem\cf2 \
+			
+\b end
+\b0  
+\b repeat
+\b0 \
+		
+\b end
+\b0  
+\b repeat
+\b0 \
+		
+\b repeat
+\b0  
+\b with
+\b0  \cf3 theItem\cf2  
+\b in
+\b0  \cf3 theList\cf2 \
+			
+\b if
+\b0  \cf8 subject\cf2  
+\b of
+\b0  \cf3 theItem\cf2  
+\b is
+\b0  
+\b equal to
+\b0  \cf3 tmpMsg\cf2  
+\b then
+\b0 \
+				\cf7 --- bug in LM hence had to open the Draft Mail box to get the Contents\cf2 \
+				
+\b set
+\b0  \cf3 tmpId\cf2  
+\b to
+\b0  \cf8 message id\cf2  
+\b of
+\b0  \cf3 theItem\cf2 \
+				
+\b set
+\b0  \cf3 tmpMsgData\cf2  
+\b to
+\b0  \cf8 content\cf2  
+\b of
+\b0  
+\b the
+\b0  \cf3 theItem\cf2 \
+				\cf7 --log msgData\cf2 \
+				
+\b set
+\b0  \cf3 tmpEmailCC\cf2  
+\b to
+\b0  \cf8 address\cf2  
+\b of
+\b0  
+\b every
+\b0  
+\i \cf6 cc recipient
+\i0 \cf2  
+\b of
+\b0  \cf3 theItem\cf2  \cf7 -- as alias\cf2 \
+				
+\b set
+\b0  \cf3 tmpEmailBcc\cf2  
+\b to
+\b0  \cf8 address\cf2  
+\b of
+\b0  
+\b every
+\b0  
+\i \cf6 bcc recipient
+\i0 \cf2  
+\b of
+\b0  \cf3 theItem\cf2 \
+				
+\b exit
+\b0  
+\b repeat
+\b0 \
+			
+\b end
+\b0  
+\b if
+\b0 \
+		
+\b end
+\b0  
+\b repeat
+\b0 \
+		
+\b set
+\b0  \cf3 message_url\cf2  
+\b to
+\b0  "message://%3c" & \cf3 tmpId\cf2  & "%3e"\
+		\cf7 -- set the clipboard to message_url\cf2 \
+		
+\b \cf4 open location
+\b0 \cf2  \cf3 message_url\cf2 \
+		\cf7 -- delay 0.5\cf2 \
+		
+\b \cf4 do shell script
+\b0 \cf2  "sleep 1"\
+		\cf7 -- tell current application to do shell script "sleep 1"\cf2 \
+		\
+		
+\b \cf6 activate
+\b0 \cf2 \
+		
+\b set
+\b0  \cf3 rtnValue\cf2  
+\b to
+\b0  
+\b \cf4 display dialog
+\b0 \cf2  \'ac\
+			"Do you have attachment to send?" \cf4 buttons\cf2  \{"Yes", "No"\} \'ac\
+			\cf4 default button\cf2  2 \cf4 with title\cf2  \cf3 MsgTitle\cf2 \
+		
+\b set
+\b0  \cf3 tmpList\cf2  
+\b to
+\b0  \{\}\
+		
+\b if
+\b0  \cf5 button returned\cf2  
+\b of
+\b0  \cf3 rtnValue\cf2  
+\b is
+\b0  "Yes" 
+\b then
+\b0 \
+			
+\b try
+\b0 \
+				
+\b \cf6 activate
+\b0 \cf2 \
+				
+\b set
+\b0  \cf3 tmpList\cf2  
+\b to
+\b0  (
+\b \cf4 choose file
+\b0 \cf2  \cf4 with prompt\cf2  "Choose the Invite Attachment: " \cf4 default location\cf2  \cf3 sourceFolder\cf2  
+\b as
+\b0  
+\i \cf6 alias
+\i0 \cf2  
+\b with
+\b0  \cf4 multiple selections allowed\cf2 )\
+			
+\b on
+\b0  
+\b error
+\b0 \
+				
+\b \cf4 display dialog
+\b0 \cf2  "No Attachment Selected: Email will be sent without attachments" \cf4 buttons\cf2  \{"OK"\} \cf4 default button\cf2  1 \cf4 with icon\cf2  
+\i \cf5 stop
+\i0 \cf2  \cf4 giving up after\cf2  10 \cf4 with title\cf2  \cf3 MsgTitle\cf2 \
+			
+\b end
+\b0  
+\b try
+\b0 \
+		
+\b end
+\b0  
+\b if
+\b0 \
+		
+\b return
+\b0  \{\cf3 tmpMsg\cf2 , \cf3 tmpEmailCC\cf2 , \cf3 tmpEmailBcc\cf2 , \cf3 tmpMsgData\cf2 , \cf3 tmpList\cf2 \}\
+	
+\b end
+\b0  
+\b tell
+\b0 \
+
+\b end
+\b0  \cf3 getDraftMsg\cf2 \
+\
+
+\b on
+\b0  \cf3 getEmailAcc\cf2 ()\
+	
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Mail"\
+		\cf7 -- activate\cf2 \
+		
+\b if
+\b0  (
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  (
+\b every
+\b0  
+\i \cf6 account
+\i0 \cf2  
+\b whose
+\b0  \cf8 enabled\cf2  
+\b is
+\b0  
+\i \cf8 true
+\i0 \cf2 )) 
+\b is
+\b0  
+\b greater than
+\b0  1 
+\b then
+\b0 \
+			
+\b set
+\b0  \cf3 menuList\cf2  
+\b to
+\b0  \cf8 name\cf2  
+\b of
+\b0  
+\b every
+\b0  
+\i \cf6 account
+\i0 \cf2  
+\b whose
+\b0  \cf8 enabled\cf2  
+\b is
+\b0  
+\i \cf8 true
+\i0 \cf2 \
+			
+\b set
+\b0  \cf3 tmpEmailAccount\cf2  
+\b to
+\b0  \'ac\
+				
+\b \cf4 choose from list
+\b0 \cf2  \cf3 menuList\cf2  \'ac\
+					\cf4 with title\cf2  \cf3 MsgTitle\cf2  \'ac\
+					\cf4 with prompt\cf2  \cf8 return\cf2  & "Please choose an Account to send the Emails: " & \cf8 return\cf2  \'ac\
+					\cf4 OK button name\cf2  "Select" \cf4 cancel button name\cf2  \'ac\
+					"Cancel" 
+\b without
+\b0  \cf4 multiple selections allowed\cf2  
+\b and
+\b0  \cf4 empty selection allowed\cf2 \
+			
+\b if
+\b0  \cf3 tmpEmailAccount\cf2  
+\b is
+\b0  
+\i \cf8 false
+\i0 \cf2  
+\b then
+\b0  
+\b return
+\b0  
+\i \cf6 missing value
+\i0 \cf2  \cf7 -- Error "User cancelled"\cf2 \
+			\cf7 -- error number -128\cf2 \
+			
+\b set
+\b0  \cf3 tmpEmailAccount\cf2  
+\b to
+\b0  \cf3 tmpEmailAccount\cf2  
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 \
+		
+\b else
+\b0 \
+			
+\b set
+\b0  \cf3 tmpEmailAccount\cf2  
+\b to
+\b0  \cf8 name\cf2  
+\b of
+\b0  
+\b every
+\b0  
+\i \cf6 account
+\i0 \cf2  
+\b whose
+\b0  \cf8 enabled\cf2  
+\b is
+\b0  
+\i \cf8 true
+\i0 \cf2 \
+		
+\b end
+\b0  
+\b if
+\b0 \
+		
+\b tell
+\b0  
+\i \cf6 account
+\i0 \cf2  \cf3 tmpEmailAccount\cf2 \
+			\cf7 --email addressed is list hence forced to string\cf2 \
+			
+\b set
+\b0  \cf3 tmpSenderEmail\cf2  
+\b to
+\b0  \cf8 email addresses\cf2  
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 \
+			
+\b set
+\b0  \cf3 tmpSenderName\cf2  
+\b to
+\b0  \cf8 full name\cf2 \
+		
+\b end
+\b0  
+\b tell
+\b0 \
+		\cf7 --log \{myEmailAccount, mySenderEmail, mySenderName\}\cf2 \
+	
+\b end
+\b0  
+\b tell
+\b0 \
+	
+\b return
+\b0  \{\cf3 tmpEmailAccount\cf2 , \cf3 tmpSenderEmail\cf2 , \cf3 tmpSenderName\cf2 \}\
+
+\b end
+\b0  \cf3 getEmailAcc\cf2 \
+\
+
+\b on
+\b0  \cf3 startINI\cf2 ()\
+	
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Mail"\
+		
+\b local
+\b0  \cf3 tmpData\cf2 \
+		\cf7 -- activate\cf2 \
+		
+\b if
+\b0  (
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  
+\i \cf6 windows
+\i0 \cf2 ) 
+\b is
+\b0  
+\b greater than
+\b0  1 
+\b then
+\b0  
+\b return
+\b0  10000\
+		\cf7 -- set tmpData to (count of messages of every mailbox in drafts mailbox)\cf2 \
+		
+\b if
+\b0  (
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  \cf8 subject\cf2  
+\b of
+\b0  
+\i \cf6 messages
+\i0 \cf2  
+\b of
+\b0  
+\b every
+\b0  
+\i \cf6 mailbox
+\i0 \cf2  
+\b in
+\b0  \cf8 drafts mailbox\cf2 ) 
+\b is
+\b0  
+\b less than
+\b0  1 
+\b then
+\b0  
+\b return
+\b0  10001\
+	
+\b end
+\b0  
+\b tell
+\b0 \
+	
+\b tell
+\b0  
+\i \cf6 application
+\i0 \cf2  "Contacts"\
+		
+\b if
+\b0  \cf8 my card\cf2  
+\b is
+\b0  
+\i \cf6 missing value
+\i0 \cf2  
+\b then
+\b0  
+\b error
+\b0  \cf6 number\cf2  10002\
+		\cf7 -- set tmpData to (count of groups)\cf2 \
+		
+\b if
+\b0  (
+\b \cf6 count
+\b0 \cf2  
+\b of
+\b0  
+\i \cf6 groups
+\i0 \cf2 ) 
+\b is
+\b0  
+\b less than
+\b0  0 
+\b then
+\b0  
+\b return
+\b0  10003\
+		\cf7 -- set tmpData to count of people of groups\cf2 \
+	
+\b end
+\b0  
+\b tell
+\b0 \
+	
+\b return
+\b0  "ok"\
+
+\b end
+\b0  \cf3 startINI\cf2 \
+\
+
+\b on
+\b0  \cf3 write_to_file\cf2 (\cf3 this_data\cf2 , \cf3 target_file\cf2 , \cf3 append_data\cf2 )\
+	
+\b try
+\b0 \
+		
+\b set
+\b0  
+\b the
+\b0  \cf3 target_file\cf2  
+\b to
+\b0  
+\b the
+\b0  \cf3 target_file\cf2  
+\b as
+\b0  
+\i \cf6 string
+\i0 \cf2 \
+		
+\b set
+\b0  
+\b the
+\b0  \cf3 open_target_file\cf2  
+\b to
+\b0  
+\b \cf4 open for access
+\b0 \cf2  
+\i \cf6 file
+\i0 \cf2  \cf3 target_file\cf2  
+\b with
+\b0  \cf4 write permission\cf2 \
+		
+\b if
+\b0  \cf3 append_data\cf2  
+\b is
+\b0  
+\i \cf8 false
+\i0 \cf2  
+\b then
+\b0  
+\b \cf4 set eof
+\b0 \cf2  
+\b of
+\b0  
+\b the
+\b0  \cf3 open_target_file\cf2  \cf4 to\cf2  0\
+		
+\b \cf4 write
+\b0 \cf2  \cf3 this_data\cf2  \cf4 to\cf2  
+\b the
+\b0  \cf3 open_target_file\cf2  \cf4 starting at\cf2  
+\i \cf5 eof
+\i0 \cf2 \
+		
+\b \cf4 close access
+\b0 \cf2  
+\b the
+\b0  \cf3 open_target_file\cf2 \
+		
+\b return
+\b0  
+\i \cf8 true
+\i0 \cf2 \
+	
+\b on
+\b0  
+\b error
+\b0 \
+		
+\b try
+\b0 \
+			
+\b \cf4 close access
+\b0 \cf2  
+\i \cf6 file
+\i0 \cf2  \cf3 target_file\cf2 \
+		
+\b end
+\b0  
+\b try
+\b0 \
+		
+\b return
+\b0  
+\i \cf8 false
+\i0 \cf2 \
+	
+\b end
+\b0  
+\b try
+\b0 \
+
+\b end
+\b0  \cf3 write_to_file\cf2 \
+\
+
+\b on
+\b0  
+\b \cf6 quit
+\b0 \cf2 \
+	
+\b \cf4 display alert
+\b0 \cf2  "Visit www.tskamath.com for more Scripts" \cf4 message\cf2  "contact support@tskamath.com" \cf4 giving up after\cf2  \cf3 upTime\cf2 \
+	
+\b continue
+\b0  
+\b \cf6 quit
+\b0 \cf2 \
+
+\b end
+\b0  
+\b \cf6 quit
+\b0 \cf2 \
+}
