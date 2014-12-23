@@ -1,5 +1,5 @@
 #My Apple Scripts: Many of My Scripts
-##SendEmail with Filter 6.0.2:
+##SendEmail with Filter 7.0.2:
 ###User Manual
 ![ScreenShot](https://github.com/tskamath/myAppleScripts/blob/Script-Mail/images/SendEmail_6_0_2.png?raw=true "First Screen")
 
@@ -56,6 +56,6 @@ If group to send has more than 100 total contacts, then it's advised to to Break
 ****Cheat Sheet**** to be safe and not send repeated emails to the same person, add the Auto Created Groups "Sent 2 Emails in 4 Emails Selected" and "BlockedContacts" when sending emails to block these Contacts.
 ![Group](https://github.com/tskamath/myAppleScripts/blob/Script-Mail/images/ContactGroup.png?raw=true "Contact Group")
 
-Visit my [my Blogs](http://tskamath.pactindia.net) also [WebSite](www.tskamath.com)
+Visit my [my Blogs](http://tskamath.pactindia.net) also [WebSite](www.tskamath.com). 
 
-&copy; tskamath.com:
+Contact Support@tskamath.com to remove the signon *"http://www.tskamath.com"* at the bottom of the email **&copy; tskamath.com**
